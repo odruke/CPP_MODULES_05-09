@@ -35,6 +35,9 @@ int	main(int ac, char **av)
 		std::cout << ORANGE << "\nTEST 10:" << RESET << std::endl;
 		ScalarConverter::convert("1.f1");
 
+		std::cout << ORANGE << "\nTEST 11:" << RESET << std::endl;
+		ScalarConverter::convert("98");
+
 	}
 	else if (ac == 2)
 		ScalarConverter::convert(av[1]);

@@ -21,18 +21,13 @@ enum e_type{
 	UNKNOWN
 };
 
-enum e_options{
-	OK,
-	IMPOSSIBLE,
-	NONDISPLAY
-};
-
 typedef struct e_convertedValue
 {
 	char		cVal;
 	int			iVal;
 	float		fVal;
 	double		dVal;
+	size_t			decim;
 }	t_convertedValue;
 
 
@@ -52,11 +47,10 @@ public:
 
 //printing functions
 void	printPseudo(std::string const& input);
-void	printChar(std::string const& input);
-void	printInt(std::string const& input);
-void	printFloat(std::string const& input);
-void	printDouble(std::string const& input);
-void	printUnknown(std::string const& input);
+void	convertFromChar(std::string const& input);
+void	convertFromInt(std::string const& input);
+void	convertFromFloat(std::string const& input);
+void	convertFromDouble(std::string const& input);
 void	mainPrint(t_convertedValue value, e_type type);
 
 #endif

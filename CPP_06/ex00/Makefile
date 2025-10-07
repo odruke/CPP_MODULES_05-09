@@ -13,7 +13,7 @@ OBJ_DIR = $(SRC_DIR)target/
 INC_DIR = ./include/
 
 # files
-FILES = main printTypes ScalarConverter
+FILES = main printTypes ScalarConverter conversion
 INC_FILES = colors ScalarConverter
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .cpp, $(FILES)))

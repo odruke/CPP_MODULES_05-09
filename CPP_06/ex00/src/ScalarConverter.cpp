@@ -6,7 +6,7 @@
 static bool	isPseudo(std::string const& input)
 {
 	std::string	specials[] = {"nan", "nanf", "+inf", "+inff", "-inf", "-inff"};
-	if (input.length() > 1 || !isprint(input[0]) || isdigit(input[0]))
+	if (input.length() == 1 || !isprint(input[0]) || isdigit(input[0]))
 		return false;
 	for (int i = 0; i < ARRAY_SIZE(specials); i++)
 	{
@@ -114,26 +114,25 @@ void	ScalarConverter::convert(std::string const& input)
 	int		i = static_cast<int>(input[0]);
 	float	f = static_cast<float>(input[0]);
 	double	d = static_cast<double>(input[0]);
-
-	mainPrint((t_convertedValue){.cVal = c, .iVal = i, .fVal = f, .dVal = d}, thisType);
-	// switch (thisType)
-	// {
-	// case PSEUDO:
-	// 	printPseudo(input);
-	// 	break;
-	// case CHAR:
-	// 	printChar(input);
-	// 	break;
-	// case INT:
-	// 	printInt(input);
-	// 	break;
-	// case FLOAT:
-	// 	printFloat(input);
-	// 	break;
-	// case DOUBLE:
-	// 	printDouble(input);
-	// default:
-	// 	printUnknown(input);
-	// 	break;
-	// }
+	switch (thisType)
+	{
+		case PSEUDO:
+			printPseudo(input);
+			break;
+		case CHAR:
+			convertFromChar(input);
+			break;
+		case INT:
+			convertFromInt(input);
+			break;
+		case FLOAT:
+			convertFromFloat(input);
+			break;
+		case DOUBLE:
+			convertFromDouble(input);
+			break;
+		default:
+			mainPrint((t_convertedValue){.cVal = c, .iVal = i, .fVal = f, .dVal = d}, thisType);
+			break;
+	}
 }
