@@ -25,10 +25,11 @@ static bool	isChar(std::string const& input)
 
 static bool	isInt(std::string const& input)
 {
-	for (size_t i = 0; i < input.length(); i++)
+	size_t i = 0;
+	if (input[0] == '+' || input[0] == '-')
+		i++;
+	for (i = i; i < input.length(); i++)
 	{
-		if (input[0] == '+' || input[0] == '-')
-			i++;
 		if (!isdigit(input[i]))
 			return false;
 	}
@@ -38,19 +39,17 @@ static bool	isInt(std::string const& input)
 static bool	isFloat(std::string const& input)
 {
 	std::string	validEnd = "fF";
-	size_t i;
-	for (i = 0; i < input.length(); i++)
+	size_t i = 0;
+	if ((input[0] == '+' || input[0] == '-'))
+		i++;
+	if (!isdigit(input[i]))
+		return false;
+	for (i = i; i < input.length(); i++)
 	{
-		if (input[0] == '+' || input[0] == '-')
-		{
-			i++;
-			if (!isdigit(input[i]))
-				return false;
-		}
 		if (!isdigit(input[i]))
 			break ;
 	}
-	if (input[i] != '.' && (input[i] == '.' && i == 0))
+	if (input[i] != '.')
 		return false;
 	for (i = i + 1; i < input.length(); i++)
 	{
@@ -64,19 +63,17 @@ static bool	isFloat(std::string const& input)
 
 static bool	isDouble(std::string const& input)
 {
-	size_t i;
-	for (i = 0; i < input.length(); i++)
+	size_t i = 0;
+	if ((input[0] == '+' || input[0] == '-'))
+		i++;
+	if (!isdigit(input[i]))
+		return false;
+	for (i = i; i < input.length(); i++)
 	{
-		if (input[0] == '+' || input[0] == '-')
-		{
-			i++;
-			if (!isdigit(input[i]))
-				return false;
-		}
 		if (!isdigit(input[i]))
 			break ;
 	}
-	if (input[i] != '.' || (input[i] == '.' && i == 0))
+	if (input[i] != '.')
 		return false;
 	for (i = i + 1; i < input.length(); i++)
 	{

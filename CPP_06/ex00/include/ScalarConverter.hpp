@@ -8,6 +8,10 @@
 #define FLOAT_MAX std::numeric_limits<float>::max()
 #define DOUBLE_MIN (-std::numeric_limits<double>::max())
 #define DOUBLE_MAX std::numeric_limits<double>::max()
+#define INFF std::numeric_limits<float>::infinity()
+#define NINFF (-std::numeric_limits<float>::infinity())
+#define INF std::numeric_limits<double>::infinity()
+#define NINF (-std::numeric_limits<double>::infinity())
 
 #include <limits>
 #include <iostream>

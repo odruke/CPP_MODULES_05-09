@@ -31,14 +31,16 @@ void	mainPrint(t_convertedValue value, e_type type)
 	if (value.fImpossible || type == UNKNOWN)
 		std::cout << RED << "impossible" << RESET << std::endl;
 	else
-		std::cout << std::fixed << std::setprecision(value.decim) << value.fValue << "f" << std::endl;
+		std::cout << std::fixed << std::setprecision(value.decim > 6? 6 : value.decim)
+				<< value.fValue << "f" << std::endl;
 
 //PRINT DOUBLE
 	std::cout << CYAN << "double: " << RESET;
 	if (value.dImpossible || type == UNKNOWN)
 		std::cout << RED << "impossible" << RESET << std::endl;
 	else
-		std::cout << std::fixed << std::setprecision(value.decim) << value.dValue << std::endl;
+		std::cout << std::fixed << std::setprecision(value.decim > 13? 13 : value.decim)
+				<< value.dValue << std::endl;
 }
 
 void	printPseudo(std::string const& input)
