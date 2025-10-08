@@ -110,10 +110,7 @@ void	ScalarConverter::convert(std::string const& input)
 		return ;
 	}
 	std::cout <<  YELLOW << "The input is type: " << GREEN << typeName[thisType] << RESET << std::endl;
-	char	c = static_cast<char>(input[0]);
-	int		i = static_cast<int>(input[0]);
-	float	f = static_cast<float>(input[0]);
-	double	d = static_cast<double>(input[0]);
+
 	switch (thisType)
 	{
 		case PSEUDO:
@@ -132,7 +129,7 @@ void	ScalarConverter::convert(std::string const& input)
 			convertFromDouble(input);
 			break;
 		default:
-			mainPrint((t_convertedValue){.cVal = c, .iVal = i, .fVal = f, .dVal = d}, thisType);
+			mainPrint((t_convertedValue){}, thisType);
 			break;
 	}
 }

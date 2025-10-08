@@ -4,9 +4,9 @@
 #define ARRAY_SIZE(array)((int)(sizeof(array) / sizeof(array[0])))
 #define INT_MIN std::numeric_limits<int>::min()
 #define INT_MAX std::numeric_limits<int>::max()
-#define FLOAT_MIN std::numeric_limits<float>::min()
+#define FLOAT_MIN (-std::numeric_limits<float>::max())
 #define FLOAT_MAX std::numeric_limits<float>::max()
-#define DOUBLE_MIN std::numeric_limits<double>::min()
+#define DOUBLE_MIN (-std::numeric_limits<double>::max())
 #define DOUBLE_MAX std::numeric_limits<double>::max()
 
 #include <limits>
@@ -21,13 +21,18 @@ enum e_type{
 	UNKNOWN
 };
 
-typedef struct e_convertedValue
+typedef struct s_convertedValue
 {
-	char		cVal;
-	int			iVal;
-	float		fVal;
-	double		dVal;
-	size_t			decim;
+	char		cValue;
+	bool		cImpossible;
+	bool		cNonDysp;
+	int			iValue;
+	bool		iImpossible;
+	float		fValue;
+	bool		fImpossible;
+	double		dValue;
+	bool		dImpossible;
+	size_t		decim;
 }	t_convertedValue;
 
 

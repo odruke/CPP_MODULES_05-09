@@ -9,31 +9,36 @@ void	mainPrint(t_convertedValue value, e_type type)
 {
 //PRINT CHAR
 	std::cout << CYAN << "char: " << RESET;
-	if (!isprint(value.cVal) || type == UNKNOWN)
-		std::cout << RED << "Non displayable" << RESET << std::endl;
+	if (value.cImpossible)
+		std::cout << RED << "impossible" << RESET << std::endl;
 	else
-		std::cout << "'" << value.cVal << "'" << std::endl;
+	{
+		if (value.cNonDysp || type == UNKNOWN)
+			std::cout << RED << "Non displayable" << RESET << std::endl;
+		else
+			std::cout << "'" << value.cValue << "'" << std::endl;
+	}
 
 //PRINT INT
 	std::cout << CYAN << "int: " << RESET;
-	if ((value.iVal < INT_MIN || value.iVal > INT_MAX) || type == UNKNOWN)
+	if (value.iImpossible || type == UNKNOWN)
 		std::cout << RED << "impossible" << RESET << std::endl;
 	else
-		std::cout << value.iVal << std::endl;
+		std::cout << value.iValue << std::endl;
 
 //PRINT FLOAT
 	std::cout << CYAN << "float: " << RESET;
-	if ((value.fVal < FLOAT_MIN || value.fVal > FLOAT_MAX) || type == UNKNOWN)
+	if (value.fImpossible || type == UNKNOWN)
 		std::cout << RED << "impossible" << RESET << std::endl;
 	else
-		std::cout << std::fixed << std::setprecision(value.decim) << value.fVal << "f" << std::endl;
+		std::cout << std::fixed << std::setprecision(value.decim) << value.fValue << "f" << std::endl;
 
 //PRINT DOUBLE
 	std::cout << CYAN << "double: " << RESET;
-	if ((value.dVal < DOUBLE_MIN || value.dVal > DOUBLE_MAX) || type == UNKNOWN)
+	if (value.dImpossible || type == UNKNOWN)
 		std::cout << RED << "impossible" << RESET << std::endl;
 	else
-		std::cout << std::fixed << std::setprecision(value.decim) << value.dVal << std::endl;
+		std::cout << std::fixed << std::setprecision(value.decim) << value.dValue << std::endl;
 }
 
 void	printPseudo(std::string const& input)
