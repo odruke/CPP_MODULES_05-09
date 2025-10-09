@@ -1,7 +1,7 @@
 ###VARIABLES###
 
 # name of the executable
-NAME = 
+NAME = realtype
 
 # compilator and compilation flags
 CC = c++
@@ -13,8 +13,8 @@ OBJ_DIR = $(SRC_DIR)target/
 INC_DIR = ./include/
 
 # files
-FILES = main 
-INC_FILES = 
+FILES = main  Base
+INC_FILES = Base A B C colors
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .cpp, $(FILES)))
 OBJ = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRC))
