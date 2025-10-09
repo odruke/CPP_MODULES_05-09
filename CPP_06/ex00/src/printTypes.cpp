@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <iomanip>
 
-void	mainPrint(t_convertedValue value, e_type type)
+void	mainPrint(ConvertedValue value, e_type type)
 {
 //PRINT CHAR
 	std::cout << CYAN << "char: " << RESET;

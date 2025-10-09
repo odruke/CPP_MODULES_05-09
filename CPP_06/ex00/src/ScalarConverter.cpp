@@ -126,7 +126,7 @@ void	ScalarConverter::convert(std::string const& input)
 			convertFromDouble(input);
 			break;
 		default:
-			mainPrint((t_convertedValue){}, thisType);
+			mainPrint((ConvertedValue){}, thisType);
 			break;
 	}
 }

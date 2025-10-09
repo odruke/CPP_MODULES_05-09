@@ -25,7 +25,7 @@ enum e_type{
 	UNKNOWN
 };
 
-typedef struct s_convertedValue
+struct ConvertedValue
 {
 	char		cValue;
 	bool		cImpossible;
@@ -37,7 +37,7 @@ typedef struct s_convertedValue
 	double		dValue;
 	bool		dImpossible;
 	size_t		decim;
-}	t_convertedValue;
+};
 
 
 class ScalarConverter
@@ -60,6 +60,6 @@ void	convertFromChar(std::string const& input);
 void	convertFromInt(std::string const& input);
 void	convertFromFloat(std::string const& input);
 void	convertFromDouble(std::string const& input);
-void	mainPrint(t_convertedValue value, e_type type);
+void	mainPrint(ConvertedValue value, e_type type);
 
 #endif

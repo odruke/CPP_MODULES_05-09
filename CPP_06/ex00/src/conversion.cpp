@@ -16,7 +16,7 @@ static size_t	countDecimals(std::string const& input, e_type type)
 
 void	convertFromChar(std::string const& input)
 {
-	t_convertedValue converted = {};
+	ConvertedValue converted = {};
 
 	converted.cValue = input[0];
 	converted.iValue = static_cast<int>(input[0]);
@@ -32,7 +32,7 @@ of undefined behaviour. Due to precision probles with the decimals, all round to
 in case of a low overflow*/
 void	convertFromInt(std::string const& input)
 {
-	t_convertedValue converted = {};
+	ConvertedValue converted = {};
 	long long int tmp = strtoll(input.c_str(), NULL, 10);
 
 	if (tmp < INT_MIN || tmp > INT_MAX)
@@ -76,7 +76,7 @@ static bool	OutOfBounds(double d, e_type type)
 
 void	convertFromFloat(std::string const& input)
 {
-	t_convertedValue converted = {};
+	ConvertedValue converted = {};
 
 	errno = 0;
 	float	f;
@@ -110,7 +110,7 @@ void	convertFromFloat(std::string const& input)
 
 void	convertFromDouble(std::string const& input)
 {
-	t_convertedValue converted = {};
+	ConvertedValue converted = {};
 
 	errno = 0;
 	double	d = strtod(input.c_str(), NULL);
