@@ -13,10 +13,11 @@ OBJ_DIR = $(SRC_DIR)target/
 INC_DIR = ./include/
 
 # files
-FILES = main  Base
-INC_FILES = Base A B C colors
+FILES = main Array
+INC_FILES = colors Array
 
-SRC = $(addprefix $(SRC_DIR), $(addsuffix .cpp, $(FILES)))
+
+SRC = $(addprefix $(SRC_DIR), $(addsuffix .cpp, $(FILES))) $(addprefix $(SRC_DIR), $(addsuffix .tpp, $(FILES)))
 OBJ = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRC))
 INC = $(addprefix $(INC_DIR)%.hpp, $(INC_FILES))
 

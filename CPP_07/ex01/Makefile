@@ -5,7 +5,7 @@ NAME = iter
 
 # compilator and compilation flags
 CC = c++
-CFLAGS = -Wall -Werror -Wextra -g -std=c++98
+CFLAGS = -Wall -Werror -Wextra -g -std=c++11
 
 # directories
 SRC_DIR = ./src/
@@ -14,7 +14,7 @@ INC_DIR = ./include/
 
 # files
 FILES = main
-INC_FILES = iter
+INC_FILES = iter colors
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .cpp, $(FILES)))
 OBJ = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRC))
