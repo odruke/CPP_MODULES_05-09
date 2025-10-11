@@ -1,7 +1,7 @@
 ###VARIABLES###
 
 # name of the executable
-NAME = realtype
+NAME = arrayTemplate
 
 # compilator and compilation flags
 CC = c++
@@ -13,13 +13,12 @@ OBJ_DIR = $(SRC_DIR)target/
 INC_DIR = ./include/
 
 # files
-FILES = main Array
-INC_FILES = colors Array
+FILES = main
+INC_FILES = colors.hpp Array.hpp Array.tpp
 
-
-SRC = $(addprefix $(SRC_DIR), $(addsuffix .cpp, $(FILES))) $(addprefix $(SRC_DIR), $(addsuffix .tpp, $(FILES)))
+SRC = $(addprefix $(SRC_DIR), $(addsuffix .cpp, $(FILES)))
 OBJ = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRC))
-INC = $(addprefix $(INC_DIR)%.hpp, $(INC_FILES))
+INC = $(addprefix $(INC_DIR), $(INC_FILES))
 
 
 
@@ -30,6 +29,7 @@ all:$(NAME)
 $(NAME): $(OBJ)
 	@$(CC) $(OBJ) -o $@
 	@$(MAKE) compilation_success
+
 
 # create .o file
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp | $(OBJ_DIR)
