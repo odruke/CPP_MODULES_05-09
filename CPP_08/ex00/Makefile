@@ -1,11 +1,15 @@
 ###VARIABLES###
 
 # name of the executable
-NAME = 
+NAME = easyfind
+
+# conditional variable. [make DEBUG=1] to print expanded tests
+NOEXCEPT ?= 0
 
 # compilator and compilation flags
 CC = c++
 CFLAGS = -Wall -Werror -Wextra -g3 -std=c++98
+EX = -DNOEXCEPT=$(NOEXCEPT)
 
 # directories
 SRC_DIR = ./src/
@@ -14,17 +18,21 @@ INC_DIR = ./include/
 
 # files
 FILES = main
-INC_FILES = colors 
+INC_FILES = colors.hpp easyfind.hpp easyfind.tpp
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .cpp, $(FILES)))
 OBJ = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRC))
-INC = $(addprefix $(INC_DIR)%.hpp, $(INC_FILES))
+INC = $(addprefix $(INC_DIR), $(INC_FILES))
+
 
 
 
 #####RULES####
 
 all:$(NAME)
+
+extra:
+	@$(MAKE) NOEXCEPT=1
 
 $(NAME): $(OBJ)
 	@$(CC) $(OBJ) -o $@
@@ -34,7 +42,7 @@ $(NAME): $(OBJ)
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp | $(OBJ_DIR)
 	@mkdir -p $(dir $@)
 	@printf "Compiling: %s                                    \r" $<
-	@$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
+	@$(CC) $(CFLAGS) -I$(INC_DIR) $(EX) -c $< -o $@
 
 $(OBJ_DIR):
 	printf "Starting compilation..."
@@ -62,5 +70,7 @@ compilation_success:
 	@echo "│ ██████████ █████ █████ ░░░█████░   ░░░█████░  │"
 	@echo "│░░░░░░░░░░ ░░░░░ ░░░░░    ░░░░░░      ░░░░░░   │"
 	@echo "└───────────────────────────────────────────────┘"
+	@echo "\n\n Try < make fclean && make extra > to compile a different version without exceptions\n\n"
 
-.PHONY: clean fclean re all compilation_success
+
+.PHONY: clean fclean re all compilation_success extra
