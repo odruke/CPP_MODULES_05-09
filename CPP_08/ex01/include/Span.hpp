@@ -6,6 +6,7 @@
 # include <stdexcept>
 # include <limits>
 # include <algorithm>
+# include <iterator>
 
 # define SIZE_MAX std::numeric_limits<size_t>::max()
 
@@ -29,6 +30,7 @@ public:
 
 //member functions
 	void	addNumber(int const& number);
+	void	addNumber(std::vector<int>::iterator begin, std::vector<int>::iterator end);
 	size_t	shortestSpan();
 	size_t	longestSpan();
 
@@ -41,6 +43,12 @@ public:
 	};
 
 	class NotEnoughMembers : public std::exception
+	{
+	public:
+		virtual const char*	what() const throw();
+	};
+
+	class NotEnoughFreeSpace : public std::exception
 	{
 	public:
 		virtual const char*	what() const throw();

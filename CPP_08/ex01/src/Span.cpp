@@ -29,6 +29,17 @@ void	Span::addNumber(int const& number)
 	this->_numbers.push_back(number);
 }
 
+void	Span::addNumber(std::vector<int>::iterator begin, std::vector<int>::iterator end)
+{
+	size_t freeSpace = this->_maxN - this->_numbers.size();
+	size_t inputSize = std::distance(begin, end);
+	if (inputSize > freeSpace)
+		throw NotEnoughFreeSpace();
+
+	this->_numbers.insert(this->_numbers.begin(), begin, end);
+}
+
+
 size_t	Span::shortestSpan(void)
 {
 	if (this->_numbers.size() < 2)
@@ -37,11 +48,11 @@ size_t	Span::shortestSpan(void)
 	std::vector<int> sorted = this->_numbers;
 	std::sort(sorted.begin(), sorted.end());
 	size_t	shortest = SIZE_MAX;
-	for (auto it = sorted.begin(); it != (sorted.end() - 1); it++)
+	for (std::vector<int>::iterator it = sorted.begin(); it != (sorted.end() - 1); it++)
 	{
-        size_t diff = static_cast<size_t>(*(it + 1) - *it);
-        if (diff < shortest)
-            shortest = diff;
+		size_t diff = static_cast<size_t>(*(it + 1) - *it);
+		if (diff < shortest)
+			shortest = diff;
 	}
 	return shortest;
 }
@@ -51,13 +62,10 @@ size_t Span::longestSpan(void)
 	if (this->_numbers.size() < 2)
 		throw NotEnoughMembers();
 
-	std::vector<int> sorted = this->_numbers;
-	std::sort(sorted.begin(), sorted.end());
+	std::vector<int>::iterator first = std::min_element(this->_numbers.begin(), this->_numbers.end());
+	std::vector<int>::iterator last = std::max_element(this->_numbers.begin(), this->_numbers.end());
 
-	int first = sorted.front();
-	int	last = sorted.back();
-
-	return static_cast<size_t>(last - first);
+	return static_cast<size_t>(*last - *first);
 }
 
 /* ========== Getters ==============*/
@@ -97,4 +105,9 @@ const char*	Span::ContainerIsFull::what() const throw()
 const char*	Span::NotEnoughMembers::what() const throw()
 {
 	return "Not enough members to calculate";
+}
+
+const char*	Span::NotEnoughFreeSpace::what() const throw()
+{
+	return "Container has not enough space left to insert this";
 }

@@ -1,7 +1,7 @@
 ###VARIABLES###
 
 # name of the executable
-NAME = 
+NAME = monster
 
 # compilator and compilation flags
 CC = c++
@@ -14,7 +14,7 @@ INC_DIR = ./include/
 
 # files
 FILES = main
-INC_FILES = colors.hpp 
+INC_FILES = colors.hpp MutantStack.hpp
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .cpp, $(FILES)))
 OBJ = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRC))

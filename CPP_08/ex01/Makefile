@@ -5,7 +5,7 @@ NAME = span
 
 # compilator and compilation flags
 CC = c++
-CFLAGS = -Wall -Werror -Wextra -g -std=c++11
+CFLAGS = -Wall -Werror -Wextra -g -std=c++98
 
 # directories
 SRC_DIR = ./src/

@@ -187,5 +187,70 @@ int	main()
 			std::cerr << e.what() << '\n';
 		}
 	}
+
+/*============== test 5: adding numbers from a range =============*/
+	std::cout << YELLOW << "\n============== test 5: adding numbers from a range =============" << RESET << std::endl;
+	{
+		Span sp;
+		std::vector<int> range;
+		try
+		{
+			sp = Span(5);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+		sp.addNumber(4);
+		std::cout << "content of " << GREEN << "sp:" << RESET << std::endl;
+		printSpan(sp);
+		range.push_back(1);
+		range.push_back(2);
+		range.push_back(3);
+		try
+		{
+			sp.addNumber(range.begin(), range.end());
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+		std::cout << "content of " << GREEN << "sp:" << RESET << std::endl;
+		printSpan(sp);
+
+	}
+
+
+/*============== test 6: adding numbers from a range causes overflow =============*/
+	std::cout << YELLOW << "\n============== test 6: adding numbers from a range causes overflow =============" << RESET << std::endl;
+	{
+		Span sp;
+		std::vector<int> range;
+		try
+		{
+			sp = Span(3);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+		sp.addNumber(4);
+		std::cout << "content of " << GREEN << "sp:" << RESET << std::endl;
+		printSpan(sp);
+		range.push_back(2);
+		range.push_back(3);
+		range.push_back(4);
+		try
+		{
+			sp.addNumber(range.begin(), range.end());
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+		std::cout << "content of " << GREEN << "sp:" << RESET << std::endl;
+		printSpan(sp);
+
+	}
 	return 0;
 }
