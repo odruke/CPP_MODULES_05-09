@@ -1,7 +1,7 @@
 ###VARIABLES###
 
 # name of the executable
-NAME = 
+NAME = span
 
 # compilator and compilation flags
 CC = c++
@@ -13,8 +13,8 @@ OBJ_DIR = $(SRC_DIR)target/
 INC_DIR = ./include/
 
 # files
-FILES = main
-INC_FILES = colors
+FILES = main Span
+INC_FILES = colors Span
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .cpp, $(FILES)))
 OBJ = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRC))
