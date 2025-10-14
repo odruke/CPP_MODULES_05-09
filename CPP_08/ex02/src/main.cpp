@@ -1,6 +1,8 @@
 #include <iostream>
 #include <colors.hpp>
 #include "MutantStack.hpp"
+#include <list>
+#include <stack>
 
 /*============== helper funtion functions as a test for iteration =============*/
 template<typename T, typename container>
@@ -43,9 +45,34 @@ int main()
 			++it;
 		}
 		std::stack<int> s(mstack);
-	std::cout << YELLOW << "============== end of test 0 =============" << RESET << std::endl;
 	}
 
+
+	std::cout << YELLOW << "============== return comparison with container <list> =============" << RESET << std::endl;
+	{
+		std::list<int>	mstack;
+		mstack.push_back(5);
+		mstack.push_back(17);
+		std::cout << mstack.back() << std::endl;
+		mstack.pop_back();
+		std::cout << mstack.size() << std::endl;
+		mstack.push_back(3);
+		mstack.push_back(5);
+		mstack.push_back(737);
+		//[...]
+		mstack.push_back(0);
+		std::list<int>::iterator it = mstack.begin();
+		std::list<int>::iterator ite = mstack.end();
+		++it;
+		--it;
+		while (it != ite)
+		{
+			std::cout << *it << std::endl;
+			++it;
+		}
+		std::stack<int, std::list<int> > s(mstack);
+		std::cout << YELLOW << "============== end of test 0 =============" << RESET << std::endl;
+	}
 
 /*============== test 1: stack methods =============*/
 	std::cout << YELLOW << "\n============== test 1: stack methods =============" << RESET << std::endl;

@@ -24,10 +24,16 @@ public:
 	typedef typename container::const_reverse_iterator const_reverse_iterator;
 
 	iterator		begin();
-	const_iterator	begin()const;
+	const_iterator	cbegin()const;//c++11
 
 	iterator		end();
-	const_iterator	end()const;
+	const_iterator	cend()const;//c++11
+
+	iterator		rbegin();
+	const_iterator	crbegin()const;//c++11
+
+	iterator		rend();
+	const_iterator	crend()const;//c++11
 };
 
 # include "MutantStack.tpp"

@@ -9,18 +9,18 @@ template<typename T, typename container>
 MutantStack<T, container>::~MutantStack() {}
 
 /* ========== iterators ==============*/
-template<typename T, typename container>
-typename MutantStack<T, container>::iterator
-MutantStack<T, container>::begin(void)
+template<typename T, typename container>//		<-templates
+typename MutantStack<T, container>::iterator//	<-return type, in c++11 we can replace for the keyword "auto"
+MutantStack<T, container>::begin(void)//		<-scope and function declaration. The scope must also indicate the templates he's using
 {
 	return this->c.begin();
 }
 
 template<typename T, typename container>
 typename MutantStack<T, container>::const_iterator
-MutantStack<T, container>::begin(void) const
+MutantStack<T, container>::cbegin(void) const
 {
-	return this->c.begin();
+	return this->c.cbegin();
 }
 
 template<typename T, typename container>
@@ -32,11 +32,38 @@ MutantStack<T, container>::end(void)
 
 template<typename T, typename container>
 typename MutantStack<T, container>::const_iterator
-MutantStack<T, container>::end(void) const
+MutantStack<T, container>::cend(void) const
 {
-	return this->c.end();
+	return this->c.cend();
 }
 
+template<typename T, typename container>
+typename MutantStack<T, container>::iterator
+MutantStack<T, container>::rbegin(void)
+{
+	return this->c.rbegin();
+}
+
+template<typename T, typename container>
+typename MutantStack<T, container>::const_iterator
+MutantStack<T, container>::crbegin(void) const
+{
+	return this->c.crbegin();
+}
+
+template<typename T, typename container>
+typename MutantStack<T, container>::iterator
+MutantStack<T, container>::rend(void)
+{
+	return this->c.rend();
+}
+
+template<typename T, typename container>
+typename MutantStack<T, container>::const_iterator
+MutantStack<T, container>::crend(void) const
+{
+	return this->c.crend();
+}
 
 /* ========== overload operator ==============*/
 template<typename T, typename container>
