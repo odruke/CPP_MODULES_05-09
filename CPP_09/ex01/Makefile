@@ -1,7 +1,11 @@
 ###VARIABLES###
 
 # name of the executable
-NAME = span
+NAME = RPN
+
+# conditional variable. [make re DEBUG] to verbose error messages.
+
+DEBUG ?= 0
 
 # compilator and compilation flags
 CC = c++
@@ -13,8 +17,8 @@ OBJ_DIR = $(SRC_DIR)target/
 INC_DIR = ./include/
 
 # files
-FILES = main Span
-INC_FILES = colors Span
+FILES = main RPN
+INC_FILES = colors RPN
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .cpp, $(FILES)))
 OBJ = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRC))
@@ -26,6 +30,9 @@ INC = $(addprefix $(INC_DIR)%.hpp, $(INC_FILES))
 
 all:$(NAME)
 
+debug:
+	$(DEBUG) = 1
+
 $(NAME): $(OBJ)
 	@$(CC) $(OBJ) -o $@
 	@$(MAKE) compilation_success
@@ -34,7 +41,7 @@ $(NAME): $(OBJ)
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp | $(OBJ_DIR)
 	@mkdir -p $(dir $@)
 	@printf "Compiling: %s                                    \r" $<
-	@$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
+	@$(CC) $(CFLAGS) -I$(INC_DIR) -DDEBUG=$(DEBUG) -c $< -o $@
 
 $(OBJ_DIR):
 	printf "Starting compilation..."
