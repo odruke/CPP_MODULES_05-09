@@ -8,10 +8,23 @@ int	main(int ac, char **av)
 	if (ac == 2 )
 	{
 		expression = av[1];
+		if (expression.empty())
+		{
+			if (DEBUG)
+				std::cerr << "usage:\nRPN [rpn expression]" << std::endl;
+			else
+				std::cerr << "Error" << std::endl;
+
+			return 1;
+		}
 	}
 	else if (ac < 2)
 	{
-		std::cerr << "usage:\nRPN [rpn expression]" << std::endl;
+		if (DEBUG)
+			std::cerr << "usage:\nRPN [rpn expression]" << std::endl;
+		else
+			std::cerr << "Error" << std::endl;
+
 		return 1;
 	}
 	else
@@ -23,6 +36,8 @@ int	main(int ac, char **av)
 			expression += av[i];
 		}
 	}
+
+
 
 	try
 	{

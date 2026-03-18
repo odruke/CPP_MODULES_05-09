@@ -91,6 +91,9 @@ void	RPN::_divide(void)
 	long long int	a = this->_stack.top();
 	this->_stack.pop();
 
+	if (b == 0)
+		throw ERROR_EXCPT("Can not divide by 0");
+
 	long long int result = a / b;
 	this->_stack.push(result);
 }
@@ -107,7 +110,7 @@ std::string	RPN::_processExpression(std::string const& expresssion)//pointer ove
 	std::string operators = "+-*/";
 	void	(RPN::*operation[operators.size()])() = {&RPN::_add, &RPN::_substract, &RPN::_multiply, &RPN::_divide};
 
-	bool	expectedSpace = false;
+	bool	expectSpace = false;
 	char	token = expresssion.at(0);
 	for (size_t i = 0; i < expresssion.size(); i++)
 	{
@@ -115,23 +118,23 @@ std::string	RPN::_processExpression(std::string const& expresssion)//pointer ove
 
 		if (std::isdigit(token))
 		{
-			if (expectedSpace)
+			if (expectSpace)
 				throw ERROR_EXCPT(std::string("Unexpected token: ") + token);
 
 			int		num = token - '0';
 			this->_stack.push(num);
-			expectedSpace = true;
+			expectSpace = true;
 		}
 		else if (token == ' ')
 		{
-			if (!expectedSpace)
+			if (!expectSpace || i + 1 == expresssion.size())
 				throw ERROR_EXCPT(std::string("Unexpected token: ") + token);
 
-			expectedSpace = false;
+			expectSpace = false;
 		}
 		else
 		{
-			if (expectedSpace || operators.find(token) == std::string::npos)
+			if (expectSpace || operators.find(token) == std::string::npos)
 				throw ERROR_EXCPT(std::string("Unexpected token: ") + token);
 
 			for (size_t j = 0; j < operators.size(); j++)
@@ -143,7 +146,7 @@ std::string	RPN::_processExpression(std::string const& expresssion)//pointer ove
 				}
 			}
 
-			expectedSpace = true;
+			expectSpace = true;
 		}
 	}
 
