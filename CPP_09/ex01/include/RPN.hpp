@@ -5,24 +5,35 @@
 #include <stack>
 #include <stdexcept>
 #include <sstream>
+#include <cctype>
 
 #ifndef DEBUG
 # define DEBUG 0
 #endif
 
 #define ERROR_EXCPT(msg) errorExcept(__FILE__, __LINE__, msg)
+#define ARRAY_SIZE(array)((int)(sizeof(array) / sizeof(array[0])))
+
 
 class RPN
 {
 	private:
 
-		std::stack<int> _stack;
+		std::stack<long long int> _stack;
+		std::string		_solution;
 
 	//operations
 		//add +
 		//substract -
 		//multiply *
 		//division /
+		void	_add(void);
+		void	_substract(void);
+		void	_multiply(void);
+		void	_divide(void);
+
+	//process
+		std::string	_processExpression(std::string const& expression);
 
 	public:
 		RPN(std::string const& expression);
@@ -33,7 +44,7 @@ class RPN
 
 		void	printSolution(void);
 
-		class errorExcept : std::exception
+		class errorExcept : public std::exception
 		{
 			private:
 				std::string	_msg;

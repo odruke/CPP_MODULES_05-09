@@ -30,8 +30,9 @@ INC = $(addprefix $(INC_DIR)%.hpp, $(INC_FILES))
 
 all:$(NAME)
 
-debug:
-	$(DEBUG) = 1
+debug: all
+DEBUG = 1
+
 
 $(NAME): $(OBJ)
 	@$(CC) $(OBJ) -o $@

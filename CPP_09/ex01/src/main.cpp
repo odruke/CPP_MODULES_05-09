@@ -11,15 +11,28 @@ int	main(int ac, char **av)
 	}
 	else if (ac < 2)
 	{
-		std::cerr << "usage:\nRPN [rpn expression]";
+		std::cerr << "usage:\nRPN [rpn expression]" << std::endl;
+		return 1;
 	}
 	else
 	{
 		for (int i = 1;  i < ac; i++)
-			expression.append(av[i]);
+		{
+			if (i > 1)
+				expression += ' ';
+			expression += av[i];
+		}
 	}
 
-	RPN rpn(expression);
+	try
+	{
+		RPN rpn(expression);
+		rpn.printSolution();
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
 
-	rpn.printSolution();
+	return 0;
 }
