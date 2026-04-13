@@ -77,6 +77,20 @@ def run_round(title: str, cases: List[TestCase], executable: str, start_index: i
     return passed, len(cases), idx
 
 
+def build_power_tokens(base: str, exponent: int) -> List[str]:
+    if exponent < 1:
+        raise ValueError("exponent must be >= 1")
+
+    tokens = [base]
+    for _ in range(exponent - 1):
+        tokens.extend([base, "*"])
+    return tokens
+
+
+def build_expr(tokens: List[str]) -> str:
+    return " ".join(tokens)
+
+
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     executable = os.path.join(script_dir, "RPN")
@@ -91,6 +105,11 @@ def main():
         print(f"{C.RED}Executable not found or not executable:{C.RESET} {executable}")
         return 1
 
+    p9_20 = pow(9, 20)
+    p9_18 = pow(9, 18)
+    p9_10 = pow(9, 10)
+    p9_9 = pow(9, 9)
+
     valid_cases = [
         TestCase("Subject sample 1", "8 9 * 9 - 9 - 9 - 4 - 1 +", "42", ""),
         TestCase("Subject sample 2", "7 7 * 7 -", "42", ""),
@@ -101,6 +120,49 @@ def main():
         TestCase("Simple division", "8 2 /", "4", ""),
         TestCase("Negative result", "3 5 -", "-2", ""),
         TestCase("Two-step expression", "2 3 4 + *", "14", ""),
+        TestCase("Long multiplication chain", "9 9 9 9 9 9 9 9 9 9 9 * * * * * * * * * *", "31381059609", ""),
+        TestCase("Negative plus negative", "-1 -5 +", "-6", ""),
+        TestCase("Positive plus negative", "2 -2 +", "0", ""),
+        TestCase("Positive minus negative", "2 -2 -", "4", ""),
+        TestCase("Negative times positive", "-9 3 *", "-27", ""),
+        TestCase("Negative divided by positive", "-8 2 /", "-4", ""),
+        TestCase("Negative divided by negative", "-8 -2 /", "4", ""),
+        TestCase(
+            "BigInt power 9^20",
+            build_expr(build_power_tokens("9", 20)),
+            str(p9_20),
+            "",
+        ),
+        TestCase(
+            "BigInt division 9^20 / 9^10",
+            build_expr(build_power_tokens("9", 20) + build_power_tokens("9", 10) + ["/"]),
+            str(p9_10),
+            "",
+        ),
+        TestCase(
+            "BigInt subtraction 9^20 - 9^18",
+            build_expr(build_power_tokens("9", 20) + build_power_tokens("9", 18) + ["-"]),
+            str(p9_20 - p9_18),
+            "",
+        ),
+        TestCase(
+            "BigInt addition 9^20 + 9^18",
+            build_expr(build_power_tokens("9", 20) + build_power_tokens("9", 18) + ["+"]),
+            str(p9_20 + p9_18),
+            "",
+        ),
+        TestCase(
+            "BigInt mixed signs -9^10 + 9^9",
+            build_expr(build_power_tokens("-9", 10) + build_power_tokens("9", 9) + ["+"]),
+            str(pow(-9, 10) + p9_9),
+            "",
+        ),
+        TestCase(
+            "BigInt negative result 9^18 - 9^20",
+            build_expr(build_power_tokens("9", 18) + build_power_tokens("9", 20) + ["-"]),
+            str(p9_18 - p9_20),
+            "",
+        ),
     ]
 
     invalid_cases = [
@@ -114,7 +176,14 @@ def main():
         TestCase("Invalid alpha token", "1 a +", "", "Error"),
         TestCase("Two-digit operand", "10 1 +", "", "Error"),
         TestCase("Division by zero", "4 0 /", "", "Error"),
-        TestCase("Empty expression", "", "", "Error"),
+        TestCase("Division by BigInt zero", "9 9 * 0 /", "", "Error"),
+        TestCase("Invalid symbol", "9 9 ^", "", "Error"),
+        TestCase("Consecutive operators", "2 3 + *", "", "Error"),
+        TestCase("Expression starts with operator", "* 2 3", "", "Error"),
+        TestCase("Unary plus token", "+1 2 +", "", "Error"),
+        TestCase("Invalid negative token spacing", "- 1 2 +", "", "Error"),
+        TestCase("Missing space before operator", "2 3+", "", "Error"),
+        TestCase("Missing space after operator", "2 +3", "", "Error"),
     ]
 
     total_passed = 0
