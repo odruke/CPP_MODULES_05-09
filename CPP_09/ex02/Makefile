@@ -1,7 +1,16 @@
 ###VARIABLES###
 
 # name of the executable
-NAME = monster
+NAME = PmergeMe
+
+# conditional variable. [make re DEBUG] to verbose error messages.
+
+DEBUG ?= 0
+
+# colors for prints
+GREEN = \033[0;32m
+RED = \033[0;31m
+RESET = \033[0m
 
 # compilator and compilation flags
 CC = c++
@@ -13,8 +22,8 @@ OBJ_DIR = $(SRC_DIR)target/
 INC_DIR = ./include/
 
 # files
-FILES = main
-INC_FILES = colors.hpp MutantStack.hpp
+FILES = main PmergeMe
+INC_FILES =	PmergeMe.hpp colors.hpp
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .cpp, $(FILES)))
 OBJ = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRC))
@@ -26,6 +35,9 @@ INC = $(addprefix $(INC_DIR), $(INC_FILES))
 
 all:$(NAME)
 
+debug:
+	@$(MAKE) re DEBUG=1
+
 $(NAME): $(OBJ)
 	@$(CC) $(OBJ) -o $@
 	@$(MAKE) compilation_success
@@ -35,7 +47,7 @@ $(NAME): $(OBJ)
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp | $(OBJ_DIR)
 	@mkdir -p $(dir $@)
 	@printf "Compiling: %s                                    \r" $<
-	@$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
+	@$(CC) $(CFLAGS) -I$(INC_DIR) -DDEBUG=$(DEBUG) -c $< -o $@
 
 $(OBJ_DIR):
 	printf "Starting compilation..."
