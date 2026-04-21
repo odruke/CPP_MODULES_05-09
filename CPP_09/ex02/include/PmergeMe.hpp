@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <climits>
 #include <ctime>
+#include <time.h>
 #include "colors.hpp"
 #include "tools.tpp"
 
@@ -19,38 +20,55 @@
 
 #define ERROR_EXCPT(msg) errorExcept(__FILE__, __LINE__, msg)
 
-template< typename C >
-void	sortPair(C& container);
+/*=================== TEMPLATES ============================*/
+template< typename P >
+void	sortPair(P& container);
+
+template< typename P, typename S >
+bool	insertPair(P& container, S const& input);
+
+template< typename P, typename S >
+void	makePend(P& containerPairs, S& containerSingle);
+
+template< typename P, typename S >
+void	makeMain(P& containerPairs, S& containerSingle);
+
+template< typename S>
+typename S::iterator	binarySearch(S const& container, int const& value);
+
+template< typename S>
+void	insertValue(S & container, int const& value);
+
+template< typename S, size_t N>
+size_t	createSecuence(size_t (&jacob)[N], S const& pendContainer);
+
+/*=============================================================*/
 
 class PmergeMe
 {
 private:
 
-	std::list<int>	_rawInput;
+	//containers
+	std::list<int>	_inputList;
+	std::deque<int>	_inputDeque;
+	std::list<int>	_sortedSolution;
+
+	//info variables
 	id_t		_nElements;
-	int			_additionalToken;
-	bool		_isOdd;
+	double		_listDuration;
+	double		_dequeDuration;
 
-	//list containers
-	std::list<std::pair<int,int> >	_list;
-	std::list<int> 					_mainList;
-	std::list<int> 					_pendList;
-	double							_listDuration;
+	//sorting functions
+	std::list<int>	_sortList(std::list<int>& input);
+	void			_insertListJacobsthall(std::list<int>& mainList, std::list<int>& pendList);
 
-	//deque containers
-	std::deque<std::pair<int,int> >	_deque;
-	std::deque<int> 				_mainDeque;
-	std::deque<int> 				_pendDeque;
-	double							_dequeDuration;
+	std::deque<int>	_sortDeque(std::deque<int>& input);
+	void			_insertDequeJacobsthall(std::deque<int>& mainList, std::deque<int>& pendList);
 
-
-
+	//helper funtions
 	bool	_parseInput(int const& size, char** const& input);
-	void	_printBefore();
-
-	void	_sortList();
-	void	_sortDeque();
 	bool	_compareLists();
+	void	_printBefore();
 	void	_printAfter();
 
 public:

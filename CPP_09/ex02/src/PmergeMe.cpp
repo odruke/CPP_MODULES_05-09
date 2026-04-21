@@ -10,39 +10,28 @@ static double nowMs()
 
 /*========================== CONSTRUCTORS AND DESTRUCTOR ==============================*/
 PmergeMe::PmergeMe() :
-_rawInput(),
+_inputList(),
+_inputDeque(),
 _nElements(0),
-_additionalToken(0),
-_isOdd(false),
-_list(),
-_mainList(),
-_pendList(),
 _listDuration(0),
-_deque(),
-_mainDeque(),
-_pendDeque(),
 _dequeDuration(0) {}
 
 PmergeMe::PmergeMe(int const& size, char** const& input)
 {
 	if (!_parseInput(size, input))
 		throw ERROR_EXCPT("Invalid input\nUsage: ./PmergeMe 3 5 9 7 4...");
+
 	this->_printBefore();
-	this->_nElements = this->_rawInput.size();
+
+	this->_nElements = this->_inputList.size();
+	this->_sortedSolution.sort();
 }
 
 PmergeMe::PmergeMe(PmergeMe const& copy) :
-_rawInput(copy._rawInput),
+_inputList(copy._inputList),
+_inputDeque(copy._inputDeque),
 _nElements(copy._nElements),
-_additionalToken(copy._additionalToken),
-_isOdd(copy._isOdd),
-_list(copy._list),
-_mainList(copy._mainList),
-_pendList(copy._pendList),
 _listDuration(copy._listDuration),
-_deque(copy._deque),
-_mainDeque(copy._mainDeque),
-_pendDeque(copy._pendDeque),
 _dequeDuration(copy._dequeDuration) {}
 
 
@@ -55,17 +44,10 @@ PmergeMe&	PmergeMe::operator=(PmergeMe const& other)
 	if (this == &other)
 		return *this;
 
-	this->_rawInput = other._rawInput;
+	this->_inputList = other._inputList;
+	this->_inputDeque = other._inputDeque;
 	this->_nElements = other._nElements;
-	this->_additionalToken = other._additionalToken;
-	this->_isOdd = other._isOdd;
-	this->_list = other._list;
-	this->_mainList = other._mainList;
-	this->_pendList = other._pendList;
 	this->_listDuration = other._listDuration;
-	this->_deque = other._deque;
-	this->_mainDeque = other._mainDeque;
-	this->_pendDeque = other._pendDeque;
 	this->_dequeDuration = other._dequeDuration;
 
 	return *this;
@@ -87,7 +69,9 @@ bool	PmergeMe::_parseInput(int const& size, char** const& input)
 		int number = std::atol(token.c_str());
 		if (number < 0 || number > INT_MAX)
 			return false;
-		this->_rawInput.push_back(number);
+		this->_inputList.push_back(number);
+		this->_inputDeque.push_back(number);
+		this->_sortedSolution.push_back(number);
 	}
 	return true;
 }
@@ -95,12 +79,12 @@ bool	PmergeMe::_parseInput(int const& size, char** const& input)
 void	PmergeMe::_printBefore(void)
 {
 	std::cout << "Before: ";
-	for (std::list<int>::iterator it = this->_rawInput.begin(); it != this->_rawInput.end(); it++)
+	for (std::list<int>::iterator it = this->_inputList.begin(); it != this->_inputList.end(); it++)
 	{
 		std::cout << *it;
         std::list<int>::const_iterator next = it;
         ++next;
-        if (next != this->_rawInput.end())
+        if (next != this->_inputList.end())
             std::cout << ' ';
 	}
 	std::cout << std::endl;
@@ -108,13 +92,13 @@ void	PmergeMe::_printBefore(void)
 
 void	PmergeMe::_printAfter()
 {
-	std::cout << "Before: ";
-	for (std::list< std::pair<int, int> >::iterator it = this->_list.begin(); it != this->_list.end(); it++)
+	std::cout << "After: ";
+	for (std::list<int>::iterator it = this->_inputList.begin(); it != this->_inputList.end(); it++)
 	{
-		std::cout << it->first << ' ' << it->second;
-		std::list< std::pair<int, int> >::iterator next = it;
+		std::cout << *it;
+		std::list<int>::iterator next = it;
 		++next;
-		if (next != this->_list.end())
+		if (next != this->_inputList.end())
 			std::cout << ' ';
 	}
 	std::cout << std::endl;
@@ -132,39 +116,167 @@ void	PmergeMe::_printAfter()
 			<< "ms" << std::endl;
 }
 
-void	PmergeMe::_sortList()
+std::list<int>	PmergeMe::_sortList(std::list<int>& input)
 {
-	double startTimer = nowMs();
+	size_t size = input.size();
+	if (input.size() <= 1)
+		return input;
 
-
-	double endTimer = nowMs();
-	this->_listDuration = endTimer - startTimer;
-}
-
-void	PmergeMe::_sortDeque()
-{
-	double startTimer = nowMs();
-
-
-	double endTimer = nowMs();
-	this->_dequeDuration = endTimer - startTimer;
-}
-
-bool	PmergeMe::_compareLists()
-{
-	std::list<std::pair<int, int> >::iterator itList = this->_list.begin();
-	std::deque<std::pair<int, int> >::iterator itDeque = this->_deque.begin();
-
-	while (itList != this->_list.end() && itDeque != this->_deque.end())
+	bool	isOdd = (size % 2 != 0);
+	int		extraItem;
+	if (isOdd)
 	{
-		if (itList->first != itDeque->first)
-			return false;
-		if (itList->second != itDeque->second)
+		extraItem = input.back();
+		input.pop_back();
+	}
+
+	//create pairs inside a pair list
+	std::list<std::pair<int,int> >	pairs;
+	if (!insertPair(pairs, input))
+		throw(ERROR_EXCPT("Raw input size does not match"));
+
+	//sort pairs of pair list
+	sortPair(pairs);
+
+	//create main and pend lists
+	std::list<int>	mainList, pendList;
+
+	makeMain(pairs, mainList);
+	makePend(pairs, pendList);
+
+	//recursion call with the new main list
+	mainList = this->_sortList(mainList);
+
+	//insert pend into main
+	this->_insertListJacobsthall(mainList, pendList);
+
+	//if extra insert extra
+	if (isOdd)
+		insertValue(mainList, extraItem);
+
+	//sorted list is in main now
+
+
+	return mainList;
+
+}
+
+void	PmergeMe::_insertListJacobsthall(std::list<int>& mainList, std::list<int>& pendList)
+{
+	if (pendList.empty())
+		return;
+
+	//create secuence based on list size
+	size_t jacob[32];
+	size_t jacobSize = createSecuence(jacob, pendList);
+
+	size_t prevJacobIndex = 0;
+
+	for (size_t i = 0; i < jacobSize; i++)
+	{
+		size_t currentJacobIndex = jacob[i];
+		if (currentJacobIndex > pendList.size())
+			currentJacobIndex = pendList.size();
+
+		for (size_t blockIdx = currentJacobIndex; blockIdx > prevJacobIndex; --blockIdx)
+		{
+			std::list<int>::iterator it = pendList.begin();
+			std::advance(it, blockIdx -1);
+
+			insertValue(mainList, *it);
+		}
+
+		prevJacobIndex = currentJacobIndex;
+
+		if (currentJacobIndex == pendList.size())
+			break;
+	}
+
+}
+
+std::deque<int>	PmergeMe::_sortDeque(std::deque<int>& input)
+{
+	size_t size = input.size();
+	if (input.size() <= 1)
+		return input;
+
+	bool	isOdd = (size % 2 != 0);
+	int		extraItem;
+	if (isOdd)
+	{
+		extraItem = input.back();
+		input.pop_back();
+	}
+
+	std::deque<std::pair<int,int> >	pairs;
+	if (!insertPair(pairs, input))
+		throw(ERROR_EXCPT("Raw input size does not match"));
+
+	sortPair(pairs);
+
+	std::deque<int>	mainList, pendList;
+
+	makeMain(pairs, mainList);
+	makePend(pairs, pendList);
+
+	mainList = this->_sortDeque(mainList);
+
+	this->_insertDequeJacobsthall(mainList, pendList);
+
+	if (isOdd)
+		insertValue(mainList, extraItem);
+
+	return mainList;
+}
+
+void	PmergeMe::_insertDequeJacobsthall(std::deque<int>& mainList, std::deque<int>& pendList)
+{
+	if (pendList.empty())
+		return;
+
+	//create secuence based on list size
+	size_t jacob[32];
+	size_t jacobSize = createSecuence(jacob, pendList);
+
+	size_t prevJacobIndex = 0;
+
+	for (size_t i = 0; i < jacobSize; i++)
+	{
+		size_t currentJacobIndex = jacob[i];
+		if (currentJacobIndex > pendList.size())
+			currentJacobIndex = pendList.size();
+
+		for (size_t blockIdx = currentJacobIndex; blockIdx > prevJacobIndex; --blockIdx)
+		{
+			int value = pendList[blockIdx - 1];
+			insertValue(mainList, value);
+		}
+
+		prevJacobIndex = currentJacobIndex;
+
+		if (currentJacobIndex == pendList.size())
+			break;
+	}
+
+}
+
+bool	PmergeMe::_compareLists(void)
+{
+
+	std::list<int>::iterator itList = this->_inputList.begin();
+	std::deque<int>::iterator itDeque = this->_inputDeque.begin();
+
+	while (itList != this->_inputList.end() && itDeque != this->_inputDeque.end())
+	{
+		if (*itList != *itDeque)
 			return false;
 
 		itList++;
 		itDeque++;
 	}
+
+	if (this->_inputList != this->_sortedSolution)
+		return false;
 	return true;
 
 }
@@ -174,8 +286,19 @@ bool	PmergeMe::_compareLists()
 
 void	PmergeMe::sortElements()
 {
-	this->_sortList();
-	this->_sortDeque();
+	double startTimer, endTimer;
+
+	startTimer = nowMs();
+	this->_inputList = this->_sortList(this->_inputList);
+	endTimer = nowMs();
+	this->_listDuration = endTimer - startTimer;
+
+
+	startTimer = nowMs();
+	this->_inputDeque = this->_sortDeque(this->_inputDeque);
+	endTimer = nowMs();
+	this->_dequeDuration = endTimer - startTimer;
+
 	if (!this->_compareLists())
 		throw(ERROR_EXCPT("sorting failed, container lists do not match"));
 

@@ -1,5 +1,5 @@
 #include "PmergeMe.hpp"
-/*create a template class that will store the input in both deque and list containers.*/
+
 int main(int ac, char **av)
 {
 	if (ac < 2)

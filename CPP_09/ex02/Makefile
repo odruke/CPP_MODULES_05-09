@@ -23,7 +23,7 @@ INC_DIR = ./include/
 
 # files
 FILES = main PmergeMe
-INC_FILES =	PmergeMe.hpp colors.hpp
+INC_FILES =	PmergeMe.hpp colors.hpp tools.tpp
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .cpp, $(FILES)))
 OBJ = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRC))
@@ -63,6 +63,7 @@ fclean: clean
 
 re: fclean all
 
+ifeq ($(DEBUG),1)
 compilation_success:
 
 	@echo "┌──────────────────────────────────────────────┐"
@@ -75,5 +76,20 @@ compilation_success:
 	@echo "│ ██████████ █████ █████ ░░░█████░  ░██████████│"
 	@echo "│░░░░░░░░░░ ░░░░░ ░░░░░    ░░░░░░   ░░░░░░░░░░ │"
 	@echo "└──────────────────────────────────────────────┘"
+	@echo "\nDebug mode: $(GREEN)enabled$(RESET)\n"
+else
+compilation_success:
 
+	@echo "┌──────────────────────────────────────────────┐"
+	@echo "│ ██████████ █████ █████    █████     ████████ │"
+	@echo "│░░███░░░░░█░░███ ░░███   ███░░░███  ███░░░░███│"
+	@echo "│ ░███  █ ░  ░░███ ███   ███   ░░███░░░    ░███│"
+	@echo "│ ░██████     ░░█████   ░███    ░███   ███████ │"
+	@echo "│ ░███░░█      ███░███  ░███    ░███  ███░░░░  │"
+	@echo "│ ░███ ░   █  ███ ░░███ ░░███   ███  ███      █│"
+	@echo "│ ██████████ █████ █████ ░░░█████░  ░██████████│"
+	@echo "│░░░░░░░░░░ ░░░░░ ░░░░░    ░░░░░░   ░░░░░░░░░░ │"
+	@echo "└──────────────────────────────────────────────┘"
+	@echo "\nDebug mode: $(RED)disabled$(RESET)\n"
+endif
 .PHONY: clean fclean re all compilation_success
