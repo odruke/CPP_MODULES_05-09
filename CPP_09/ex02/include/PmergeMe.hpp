@@ -19,6 +19,7 @@
 #endif
 
 #define ERROR_EXCPT(msg) errorExcept(__FILE__, __LINE__, msg)
+#define JACOB_SIZE 13
 
 /*=================== TEMPLATES ============================*/
 template< typename P >
@@ -54,7 +55,7 @@ private:
 	std::list<int>	_sortedSolution;
 
 	//info variables
-	id_t		_nElements;
+	size_t		_nElements;
 	double		_listDuration;
 	double		_dequeDuration;
 
@@ -70,6 +71,7 @@ private:
 	bool	_compareLists();
 	void	_printBefore();
 	void	_printAfter();
+	void	_generateSecuence(size_t jacob[]);
 
 public:
 	PmergeMe();

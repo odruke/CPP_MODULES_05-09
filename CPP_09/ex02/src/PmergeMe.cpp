@@ -50,6 +50,7 @@ PmergeMe&	PmergeMe::operator=(PmergeMe const& other)
 	this->_listDuration = other._listDuration;
 	this->_dequeDuration = other._dequeDuration;
 
+
 	return *this;
 }
 
@@ -166,13 +167,13 @@ void	PmergeMe::_insertListJacobsthall(std::list<int>& mainList, std::list<int>& 
 	if (pendList.empty())
 		return;
 
-	//create secuence based on list size
-	size_t jacob[32];
-	size_t jacobSize = createSecuence(jacob, pendList);
+	size_t jacob[JACOB_SIZE];
+	this->_generateSecuence(jacob);
+
 
 	size_t prevJacobIndex = 0;
 
-	for (size_t i = 0; i < jacobSize; i++)
+	for (size_t i = 0; i < JACOB_SIZE; i++)
 	{
 		size_t currentJacobIndex = jacob[i];
 		if (currentJacobIndex > pendList.size())
@@ -190,6 +191,17 @@ void	PmergeMe::_insertListJacobsthall(std::list<int>& mainList, std::list<int>& 
 
 		if (currentJacobIndex == pendList.size())
 			break;
+	}
+
+	if (prevJacobIndex < pendList.size())
+	{
+		for (size_t i = pendList.size(); i > prevJacobIndex; --i)
+		{
+			std::list<int>::iterator it = pendList.begin();
+			std::advance(it, i - 1);
+
+			insertValue(mainList, *it);
+		}
 	}
 
 }
@@ -235,12 +247,12 @@ void	PmergeMe::_insertDequeJacobsthall(std::deque<int>& mainList, std::deque<int
 		return;
 
 	//create secuence based on list size
-	size_t jacob[32];
-	size_t jacobSize = createSecuence(jacob, pendList);
+	size_t jacob[JACOB_SIZE];
+	this->_generateSecuence(jacob);
 
 	size_t prevJacobIndex = 0;
 
-	for (size_t i = 0; i < jacobSize; i++)
+	for (size_t i = 0; i < JACOB_SIZE; i++)
 	{
 		size_t currentJacobIndex = jacob[i];
 		if (currentJacobIndex > pendList.size())
@@ -256,6 +268,15 @@ void	PmergeMe::_insertDequeJacobsthall(std::deque<int>& mainList, std::deque<int
 
 		if (currentJacobIndex == pendList.size())
 			break;
+	}
+
+		if (prevJacobIndex < pendList.size())
+	{
+		for (size_t i = pendList.size(); i > prevJacobIndex; --i)
+		{
+			int value = pendList[i - 1];
+			insertValue(mainList, value);
+		}
 	}
 
 }
@@ -280,7 +301,22 @@ bool	PmergeMe::_compareLists(void)
 	return true;
 
 }
+void	PmergeMe::_generateSecuence(size_t jacob[])
+{
 
+	size_t i = 0;
+
+	jacob[i++] = 1;
+	jacob[i++] = 3;
+
+	while (i < JACOB_SIZE)
+	{
+		size_t n = jacob[i - 1] + 2 * jacob[i - 2];
+		jacob[i++] = n;
+	}
+
+	return;
+}
 
 /*======================= PUBLIC FUNCTIONS =============================================*/
 
