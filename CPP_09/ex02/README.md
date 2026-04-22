@@ -81,7 +81,7 @@ The process is implemented in six stages.
 
 Group elements into pairs. If there is an odd element, keep it aside and insert it at the end.
 
-![Step 1 - Make pairs](docs/images/merge-insertion-step-1.png)
+![Step 1 - Make pairs](docs/images/sorting_pairs.jpg)
 
 ### 2) Split pairs into main and pending
 
@@ -90,19 +90,19 @@ Each pair is sorted internally (small, large).
 - `main`: all larger elements (`second`)
 - `pending`: all smaller elements (`first`)
 
-![Step 2 - Split into main and pending](docs/images/merge-insertion-step-2.png)
+![Step 2 - Split into main and pending](docs/images/main_and_pend.jpg)
 
 ### 3) Recursively sort the main sequence
 
 `main` is recursively sorted with the same approach until base cases are reached.
 
-![Step 3 - Recursion](docs/images/merge-insertion-step-3.png)
+![Step 3 - Recursion](docs/images/recursion.jpg)
 
 ### 4) Binary insertion concept
 
 Pending values are inserted into an already sorted sequence using binary-search insertion.
 
-![Step 4 - Binary insertion](docs/images/merge-insertion-step-4.png)
+![Step 4 - Binary insertion](docs/images/binary_insertion.jpg)
 
 ### 5) Jacobsthal sequence
 
@@ -122,7 +122,7 @@ Instead of inserting pending values left-to-right, insertion is done in reverse 
 
 If a block limit exceeds pending size, it is clamped to the container size. If needed, remaining tail elements are inserted after the main Jacobsthal pass.
 
-![Step 5 - Jacobsthal block insertion](docs/images/merge-insertion-step-5.png)
+![Step 5 - Jacobsthal block insertion](docs/images/insertion_with_jacob.jpg)
 
 ## Notes
 
